@@ -3,24 +3,25 @@ import Block from './../block/block';
 class BlockChain {
     chain: Block[];
 
-    constructor(genesis: Block) {
+    constructor() {
+        const genesis = Block.genesisBlock();
         this.chain = [genesis];
     }
 
-    async addBlock(data: any): Promise<Block> {
+    addBlock(data: any): Block {
         const lastBlock = this.chain[this.chain.length - 1];
-        const block = await Block.mineBlock(lastBlock, data);
+        const block = Block.mineBlock(lastBlock, data);
         this.chain.push(block);
         return block;
     }
 
-    async isValidChain(chain: Block[]): Promise<boolean> {
-        if (JSON.stringify(chain[0]) !== JSON.stringify(await Block.genesisBlock())) return false;
+    isValidChain(chain: Block[]): boolean {
+        if (JSON.stringify(chain[0]) !== JSON.stringify(Block.genesisBlock())) return false;
         for (let i = 1; i < chain.length; i++) {
             const block = chain[i];
             const lastBlock = chain[i - 1];
             if (block.lastHash !== lastBlock.hash) return false;
-            if (block.hash !== await Block.blockHash(block)) return false;
+            if (block.hash !== Block.blockHash(block)) return false;
         }
         return true;
     }

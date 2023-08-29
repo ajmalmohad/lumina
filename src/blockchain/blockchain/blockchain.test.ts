@@ -6,38 +6,36 @@ import { describe, it, expect, beforeEach } from 'vitest';
 describe('BlockChain', () => {
     let blockchain: BlockChain;
     let blockchain2: BlockChain;
-    let genesis: Block;
     
-    beforeEach(async () => {
-        genesis = await Block.genesisBlock();
-        blockchain = new BlockChain(genesis);
-        blockchain2 = new BlockChain(genesis);
+    beforeEach(() => {;
+        blockchain = new BlockChain();
+        blockchain2 = new BlockChain();
     });
 
-    it("starts with the genesis block",async () => {
-        expect(blockchain.chain[0]).toEqual(await Block.genesisBlock());
+    it("starts with the genesis block", () => {
+        expect(blockchain.chain[0]).toEqual(Block.genesisBlock());
     });
     
-    it("adds a new block",async () => {
+    it("adds a new block", () => {
         const data = "newblock";
-        await blockchain.addBlock(data);
+        blockchain.addBlock(data);
         expect(blockchain.chain[blockchain.chain.length - 1].data).toEqual(data);
     });
 
-    it("validates a valid chain", async () => {
+    it("validates a valid chain", () => {
         blockchain2.addBlock('foo');
-        expect(await blockchain.isValidChain(blockchain2.chain)).toBe(true);
+        expect(blockchain.isValidChain(blockchain2.chain)).toBe(true);
     });
 
-    it("invalidates corrupt genesis", async () => {
+    it("invalidates corrupt genesis", () => {
         blockchain2.chain[0] = new Block(Date.now(), '', '', [], 0, BASE_DIFFICULTY);
-        expect(await blockchain.isValidChain(blockchain2.chain)).toBe(false);
+        expect(blockchain.isValidChain(blockchain2.chain)).toBe(false);
     });
 
-    it("invalidates a corrupt chain", async () => {
+    it("invalidates a corrupt chain", () => {
         blockchain2.addBlock('foo');
         blockchain2.chain[1] = new Block(Date.now(), '', '', [], 0, BASE_DIFFICULTY);
-        expect(await blockchain.isValidChain(blockchain2.chain)).toBe(false);
+        expect(blockchain.isValidChain(blockchain2.chain)).toBe(false);
     });
 
     it("replaces the blockchain", () => {

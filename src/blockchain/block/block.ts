@@ -1,4 +1,4 @@
-import crypto from "crypto-js";
+import CryptoJS from "crypto-js";
 
 export const BASE_DIFFICULTY = 3;
 export const MINE_RATE = 3000;
@@ -31,16 +31,16 @@ class Block {
         };
     }
 
-    static async genesisBlock(): Promise<Block> {
+    static genesisBlock(): Block {
         const lastHash = null;
         const data: any[] = [];
         const timestamp = new Date("01-01-01").getTime();
         const nonce = 4668;
-        const hash = await Block.hash(timestamp, lastHash, data, nonce, BASE_DIFFICULTY);
+        const hash = Block.hash(timestamp, lastHash, data, nonce, BASE_DIFFICULTY);
         return new this(timestamp, lastHash, hash, data, nonce, BASE_DIFFICULTY);
     }
 
-    static async mineBlock(lastBlock: Block, data: any): Promise<Block> {
+    static mineBlock(lastBlock: Block, data: any): Block {
         const lastHash = lastBlock.hash;
         let hash, timestamp;
         let { difficulty } = lastBlock;
@@ -50,19 +50,19 @@ class Block {
             nonce++;
             timestamp = Date.now();
             difficulty = Block.adjustDifficulty(lastBlock, timestamp);
-            hash = await Block.hash(timestamp, lastHash, data, nonce, difficulty);
+            hash = Block.hash(timestamp, lastHash, data, nonce, difficulty);
         } while (hash.substring(0, difficulty) !== '0'.repeat(difficulty));
         return new this(timestamp, lastHash, hash, data, nonce, difficulty);
     }
 
-    static async hash(timestamp: number, lastHash: string | null, data: any[], nonce: number, difficulty: number): Promise<string> {
+    static hash(timestamp: number, lastHash: string | null, data: any[], nonce: number, difficulty: number): string {
         const hashData = `${timestamp}${lastHash}${JSON.stringify(data)}${nonce}${difficulty}`;
-        return crypto.SHA256(hashData).toString();
+        return CryptoJS.SHA256(hashData).toString();
     }
 
-    static async blockHash(block: Block): Promise<string> {
+    static blockHash(block: Block): string {
         const { timestamp, lastHash, data, nonce, difficulty } = block;
-        return await Block.hash(timestamp, lastHash, data, nonce, difficulty);
+        return Block.hash(timestamp, lastHash, data, nonce, difficulty);
     }
 
     static adjustDifficulty(lastBlock: Block, currentTime: number): number {

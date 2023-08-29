@@ -21,7 +21,7 @@ class Wallet {
         `;
     }
 
-    sign(dataHash: string): any { // Replace 'any' with the appropriate return type
+    sign(dataHash: string): any { 
         return this.keyPair.sign(dataHash);
     }
 

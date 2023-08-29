@@ -1,0 +1,92 @@
+import ChainUtil from "../chainutil/chainutil";
+import Wallet from "../wallet/wallet";
+
+export const MINING_REWARD:number = 50;
+
+interface TransactionOutput {
+    amount: number;
+    address: string;
+}
+
+interface TransactionInput {
+    timestamp: number;
+    amount: number;
+    address: string;
+    signature: string;
+}
+
+class Transaction {
+    id: string;
+    input: TransactionInput | null;
+    outputs: TransactionOutput[];
+
+    constructor() {
+        this.id = ChainUtil.id();
+        this.input = null;
+        this.outputs = [];
+    }
+
+    update(senderWallet: Wallet, recipient: string, amount: number): Transaction | void {
+        const senderOutput = this.outputs.find(output => output.address === senderWallet.publicKey);
+
+        if(!senderOutput) return this; // Beware
+
+        if (amount > senderOutput.amount) {
+            console.log(`Amount: ${amount} exceeds balance.`);
+            return;
+        }
+
+        senderOutput.amount -= amount;
+        this.outputs.push({ amount, address: recipient });
+        Transaction.signTransaction(this, senderWallet);
+
+        return this;
+    }
+
+    static transactionWithOutputs(senderWallet: Wallet, outputs: TransactionOutput[]): Transaction {
+        const transaction = new this();
+        transaction.outputs.push(...outputs);
+        Transaction.signTransaction(transaction, senderWallet);
+        return transaction;
+    }
+
+    static newTransaction(senderWallet: Wallet, recipient: string, amount: number): Transaction | void {
+        if (amount > senderWallet.balance) {
+            console.log(`Amount: ${amount} exceeds balance.`);
+            return;
+        }
+
+        return Transaction.transactionWithOutputs(senderWallet, [
+            { amount: senderWallet.balance - amount, address: senderWallet.publicKey },
+            { amount, address: recipient },
+        ]);
+    }
+
+    static rewardTransaction(minerWallet: Wallet, blockchainWallet: Wallet): Transaction {
+        return Transaction.transactionWithOutputs(blockchainWallet, [{
+            amount: MINING_REWARD,
+            address: minerWallet.publicKey,
+        }]);
+    }
+
+    static signTransaction(transaction: Transaction, senderWallet: Wallet): void {
+        transaction.input = {
+            timestamp: Date.now(),
+            amount: senderWallet.balance,
+            address: senderWallet.publicKey,
+            signature: senderWallet.sign(ChainUtil.hash(transaction.outputs)),
+        };
+    }
+
+    static verifyTransaction(transaction: Transaction): boolean {
+        if (transaction.input == null) return false; // Beware
+        
+        return ChainUtil.verifySignature(
+            transaction.input.address,
+            transaction.input.signature,
+            ChainUtil.hash(transaction.outputs)
+        );
+    }
+}
+
+export default Transaction;

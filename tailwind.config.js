@@ -8,7 +8,21 @@ export default {
     "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}"
   ],
   theme: {
-    extend: {},
+    extend: {
+      backgroundImage: {
+        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+      },
+      animation: {
+        'move-slow': 'move 40s ease infinite',
+      },
+      keyframes: {
+        move: {
+          '0%, 100%': { transform: 'translate(-30%, -30%)' },
+          '40%': { transform: 'translate(30%, 20%)' },
+          '70%': { transform: 'translate(-30%, 30%)' },
+        }
+      }
+    },
   },
   darkMode: "class",
   plugins: [nextui()]

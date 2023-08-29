@@ -5,15 +5,14 @@ export default function FullNavbar() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
   
     const menuItems = [
-      "Profile",
+      "Settings",
       "Dashboard",
-      "Activity",
-      "Analytics",
-      "System",
-      "Deployments",
-      "My Settings",
-      "Team Settings",
-      "Help & Feedback",
+      "Block Explorer",
+      "History",
+      "Connection",
+      "Memory Pool",
+      "Wallet",
+      "Github",
     ];
   
     return (

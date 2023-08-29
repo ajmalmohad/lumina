@@ -40,7 +40,7 @@ class Block {
         return new this(timestamp, lastHash, hash, data, nonce, BASE_DIFFICULTY);
     }
 
-    static async mineBlock(lastBlock: Block, data: any[]): Promise<Block> {
+    static async mineBlock(lastBlock: Block, data: any): Promise<Block> {
         const lastHash = lastBlock.hash;
         let hash, timestamp;
         let { difficulty } = lastBlock;

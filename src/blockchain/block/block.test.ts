@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import Block from './block';
+import Block, { BASE_DIFFICULTY } from './block';
 import { describe, it, expect, beforeEach } from 'vitest';
 
 describe('Block', () => {
@@ -11,9 +11,6 @@ describe('Block', () => {
         data = 'bar';
         lastBlock = await Block.genesisBlock();
         block = await Block.mineBlock(lastBlock, data);
-        console.log(lastBlock);
-        console.log(block);
-        
     });
 
     it("sets the `data` to match given input", () => {
@@ -29,12 +26,12 @@ describe('Block', () => {
     });
 
     it('lowers the difficulty for slowly mined blocks', async () => {
-        const adjustedDifficulty = await Block.adjustDifficulty(block, block.timestamp + 360000);
-        expect(adjustedDifficulty).toEqual(block.difficulty - 1);
+        const adjustedDifficulty = Block.adjustDifficulty(block, block.timestamp + 360000);
+        expect(adjustedDifficulty).toEqual(Math.max(BASE_DIFFICULTY, block.difficulty - 1));
     });
 
     it('raises the difficulty for quickly mined blocks', async () => {
-        const adjustedDifficulty = await Block.adjustDifficulty(block, block.timestamp + 1);
+        const adjustedDifficulty = Block.adjustDifficulty(block, block.timestamp + 1);
         expect(adjustedDifficulty).toEqual(block.difficulty + 1);
     });
 });

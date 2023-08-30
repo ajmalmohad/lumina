@@ -1,9 +1,11 @@
 import {Card, CardBody, CardHeader, Input, Chip} from "@nextui-org/react";
 import { useState } from "react";
 import {Button} from "@nextui-org/react";
-import { wallet } from "../store/store";
+import { useWalletStore } from "../store/walletStore";
 
 function TransferCard() {
+
+  const { balance } = useWalletStore()
 
   const [toAddress, setAddress] = useState("");
   const [amount, setAmount] = useState("");
@@ -18,14 +20,12 @@ function TransferCard() {
             <Input isClearable type="text" variant={"bordered"} label="To Address" value={toAddress} onValueChange={setAddress} />
             <Input className="mt-5" type="number" variant={"bordered"} label="Amount" value={amount} onValueChange={setAmount} />
             <div className="mt-5">
-              <Chip color="default">{wallet.balance - (parseFloat(amount) || 0) >= 0 ? "Remaining: "+ (wallet.balance - (parseFloat(amount) || 0)).toString() : "Invalid" }</Chip>
+              <Chip color="default">{balance - (parseFloat(amount) || 0) >= 0 ? "Remaining: "+ (balance - (parseFloat(amount) || 0)).toString() : "Invalid" }</Chip>
             </div>
             <div className="mt-5">
               <Button 
                 color="primary" 
-                isDisabled={!parseFloat(amount) || toAddress==="" || wallet.balance - parseFloat(amount) < 0 }
-                onClick={()=>{console.log(wallet);
-                }}
+                isDisabled={!parseFloat(amount) || toAddress==="" || balance - parseFloat(amount) < 0 }
               >Send LUM</Button> 
             </div>
           </CardBody>

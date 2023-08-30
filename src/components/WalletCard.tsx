@@ -1,13 +1,14 @@
 import { Avatar, CardBody, Snippet } from "@nextui-org/react";
 import {Card, CardHeader, CardFooter, Select, SelectItem} from "@nextui-org/react";
-import { useBlockchainStore } from "../store/store";
-import { useState } from "react";
+import { WalletContext } from "../store/store";
+import { useContext, useState } from "react";
 import {Chip} from "@nextui-org/react";
 import {Button} from "@nextui-org/react";
 import {Input} from "@nextui-org/react";
 
 function WalletCard() {
-  const { wallet } = useBlockchainStore()
+
+  const wallet = useContext(WalletContext)
 
   const currencies = [
     {
@@ -42,7 +43,7 @@ function WalletCard() {
                   <CardBody className="overflow-visible py-2 flex flex-row justify-between">
                     <div className="flex-1">
                       <small className="text-default-500">Balance <Chip size="sm" color="warning" variant="dot">{value}</Chip></small>
-                      <h4 className="font-bold text-large">{value == "LUM" ? wallet.balance : wallet.balance*1.2}</h4>
+                      <h4 className="font-bold text-large">{value == "LUM" ? Math.round(wallet.balance * 100) / 100 : Math.round(wallet.balance * 1.5 * 100) / 100}</h4>
                     </div>
                     <div className="flex-1">
                       <Select
@@ -96,8 +97,8 @@ function WalletCard() {
               </div>
           </CardBody>
 
-          <CardFooter className="cursor-pointer justify-center before:bg-white/10 border-white/20 border-1 overflow-hidden py-1 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%_-_8px)] shadow-small ml-1 z-10">
-            <p className="py-2 text-tiny text-white/80">Get More Information</p>
+          <CardFooter>
+            <Button className="py-2 text-tiny text-white/80">Know More</Button>
           </CardFooter>
         </Card>
     </>

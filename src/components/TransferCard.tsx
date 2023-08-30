@@ -1,9 +1,9 @@
 import {Card, CardBody, CardHeader, Input, Chip} from "@nextui-org/react";
-import { useBlockchainStore } from "../store/store";
 import { useState } from "react";
+import {Button} from "@nextui-org/react";
+import { wallet } from "../store/store";
 
 function TransferCard() {
-  const { wallet } = useBlockchainStore()
 
   const [toAddress, setAddress] = useState("");
   const [amount, setAmount] = useState("");
@@ -19,6 +19,14 @@ function TransferCard() {
             <Input className="mt-5" type="number" variant={"bordered"} label="Amount" value={amount} onValueChange={setAmount} />
             <div className="mt-5">
               <Chip color="default">{wallet.balance - (parseFloat(amount) || 0) >= 0 ? "Remaining: "+ (wallet.balance - (parseFloat(amount) || 0)).toString() : "Invalid" }</Chip>
+            </div>
+            <div className="mt-5">
+              <Button 
+                color="primary" 
+                isDisabled={!parseFloat(amount) || toAddress==="" || wallet.balance - parseFloat(amount) < 0 }
+                onClick={()=>{console.log(wallet);
+                }}
+              >Send LUM</Button> 
             </div>
           </CardBody>
         </Card>

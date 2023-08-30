@@ -26,6 +26,8 @@ function TransferCard() {
               <Button 
                 color="primary" 
                 isDisabled={!parseFloat(amount) || toAddress==="" || balance - parseFloat(amount) < 0 }
+                onClick={() => { console.log("Transact");
+                 }}
               >Send LUM</Button> 
             </div>
           </CardBody>

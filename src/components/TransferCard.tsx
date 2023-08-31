@@ -137,6 +137,8 @@ function TransferCard() {
           transaction = newTransaction(recipient, amount);
           if(transaction) updateOrAddTransaction(transaction);
       }
+
+      changeBalance(balance - amount);
   }
 
   return (

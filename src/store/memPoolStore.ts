@@ -28,7 +28,7 @@ interface MemPoolStore {
 
 export const useMemPoolStore = create<MemPoolStore>()(
     devtools(
-      persist(
+    //   persist(
         (set) => ({
             transactions: [],
             addTransaction: (transaction: Transaction) => set((state) => ({ transactions: [...state.transactions, transaction] })),
@@ -36,5 +36,5 @@ export const useMemPoolStore = create<MemPoolStore>()(
         }),
         { name: 'memPoolStore' }
       )
-    )
+    // )
 )

@@ -36,7 +36,7 @@ const genesis = {
 
 export const useBlockChainStore = create<BlockChainStore>()(
     devtools(
-      persist(
+      // persist(
         (set) => ({
             genesis: genesis,
             chain: [genesis],
@@ -44,5 +44,5 @@ export const useBlockChainStore = create<BlockChainStore>()(
         }),
         { name: 'blockChainStore' }
       )
-    )
+    // )
 )

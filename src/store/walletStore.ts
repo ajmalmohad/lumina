@@ -15,7 +15,7 @@ const keyPair = ec.genKeyPair();
 
 export const useWalletStore = create<WalletStore>()(
     devtools(
-      persist(
+      // persist(
         (set) => ({
             balance: 500,
             keyPair: keyPair,
@@ -24,6 +24,6 @@ export const useWalletStore = create<WalletStore>()(
             sign: (data: string) => { return keyPair.sign(data) }
         }),
         { name: 'walletStore' }
-      )
+      // )
     )
 )

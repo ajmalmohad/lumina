@@ -4,7 +4,7 @@ import CryptoJS from "crypto-js";
 
 const BASE_DIFFICULTY = 3;
 
-type Block = {
+export type Block = {
     timestamp: number;
     lastHash: string | null;
     hash: string;

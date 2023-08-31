@@ -1,19 +1,20 @@
 import { create } from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
+import { ec as EC } from 'elliptic';
 
-interface TransactionOutput {
+export interface TransactionOutput {
     amount: number;
     address: string;
 }
 
-interface TransactionInput {
+export interface TransactionInput {
     timestamp: number;
     amount: number;
     address: string;
-    signature: string;
+    signature: EC.Signature;
 }
 
-interface Transaction {
+export interface Transaction {
     id: string;
     input: TransactionInput | null;
     outputs: TransactionOutput[];
@@ -21,6 +22,8 @@ interface Transaction {
 
 interface MemPoolStore {
     transactions: Transaction[];
+    addTransaction: (transaction: Transaction) => void;
+    setTransactions: (transactions: Transaction[]) => void;
 }
 
 export const useMemPoolStore = create<MemPoolStore>()(
@@ -29,6 +32,7 @@ export const useMemPoolStore = create<MemPoolStore>()(
         (set) => ({
             transactions: [],
             addTransaction: (transaction: Transaction) => set((state) => ({ transactions: [...state.transactions, transaction] })),
+            setTransactions: (transactions: Transaction[]) => set(()=> ({transactions: transactions}))
         }),
         { name: 'memPoolStore' }
       )

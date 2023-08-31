@@ -7,7 +7,8 @@ interface WalletStore {
   balance: number,
   keyPair: any,
   publicKey: string,
-  changeBalance: (balance: number) => void
+  changeBalance: (balance: number) => void,
+  sign: (data: string) => EC.Signature
 }
 
 const keyPair = ec.genKeyPair();
@@ -20,6 +21,7 @@ export const useWalletStore = create<WalletStore>()(
             keyPair: keyPair,
             publicKey: keyPair.getPublic().encode('hex', false).toString(),
             changeBalance: (balance: number) => set(() => ({ balance: balance })),
+            sign: (data: string) => { return keyPair.sign(data) }
         }),
         { name: 'walletStore' }
       )

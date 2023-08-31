@@ -1,4 +1,4 @@
-import {Card, CardHeader, Image} from "@nextui-org/react";
+import {Card, CardHeader} from "@nextui-org/react";
 
 function MineBlockCard() {
   return (
@@ -7,12 +7,6 @@ function MineBlockCard() {
           <CardHeader className="absolute z-10 top-1 flex-col items-start">
             <h4 className="text-white/90 font-medium text-xl">Mine a Block</h4>
           </CardHeader>
-          <Image
-            removeWrapper
-            alt="Relaxing app background"
-            className="z-0 w-full h-full object-cover"
-            src="/images/card-example-5.jpeg"
-          />
         </Card>
     </>
   )

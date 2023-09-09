@@ -86,9 +86,9 @@ function TransferCard() {
       transaction.outputs.push({ amount, address: recipient });
 
       transaction.input = {
-        timestamp: Date.now(),
-        amount: balance,
-        address: publicKey,
+        timestamp: transaction.input?.timestamp || Date.now(),
+        amount: transaction.input?.amount || balance,
+        address: transaction.input?.address || publicKey,
         signature: sign(CryptoJS.SHA256(JSON.stringify(transaction.outputs)).toString()),
       };
   }

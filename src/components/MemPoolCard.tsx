@@ -1,4 +1,4 @@
-import {Card, CardHeader, CardBody, Chip, Button, Code} from "@nextui-org/react";
+import {Card, CardHeader, CardBody, Chip, Button, Code, Divider} from "@nextui-org/react";
 import { useMemPoolStore } from "../store/memPoolStore";
 
 function MemPoolCard() {
@@ -15,8 +15,24 @@ function MemPoolCard() {
             <Code>{transactions[i].input?.address.slice(0, 8)+"..."+transactions[i].input?.address.slice(-6)}</Code>
         </CardHeader>
 
-        <CardBody>
-            
+        <CardBody className="pt-0 pb-3 px-3 flex flex-row">
+          <div className="flex flex-col flex-1 rounded px-2 py-1">
+            <small className="text-default-500">Input</small>
+            <Chip className="mt-2">{transactions[i].input?.amount} LUM</Chip>
+          </div>
+          <Divider orientation="vertical" />
+          <div className="flex flex-col flex-1 rounded px-2 py-1">
+            <small className="text-default-500">Spent</small>
+            <Chip className="mt-2">{transactions[i].outputs.reduce((accumulator, currentValue, index) => {
+              if (index > 0) return accumulator + currentValue.amount
+              else return accumulator
+            }, 0)} LUM</Chip>
+          </div>
+          <Divider orientation="vertical" />
+          <div className="flex flex-col flex-1 rounded px-2 py-1">
+            <small className="text-default-500">Balance</small>
+            <Chip className="mt-2">{transactions[i].outputs[0].amount} LUM</Chip>
+          </div>
         </CardBody>
 
       </Card>

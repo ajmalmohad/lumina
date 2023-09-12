@@ -16,6 +16,7 @@ export type Block = {
 interface BlockChainStore {
   genesis: Block;
   chain: Block[];
+  addBlock: (block: Block) => void;
 }
 
 const timestamp = new Date("01-01-01").getTime();

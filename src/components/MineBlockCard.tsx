@@ -71,7 +71,6 @@ function MineBlockCard() {
   const adjustDifficulty = (lastBlock: Block, currentTime: number): number => {
     let { difficulty } = lastBlock;
     difficulty = lastBlock.timestamp + MINE_RATE > currentTime ? difficulty + 1 : difficulty - 1;
-    console.log(difficulty, lastBlock.timestamp - currentTime);
     return difficulty < BASE_DIFFICULTY ? BASE_DIFFICULTY : difficulty;
   }
 
